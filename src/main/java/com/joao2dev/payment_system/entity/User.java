@@ -56,7 +56,7 @@ public class User implements UserDetails {
 
     @Override
     public @Nullable String getPassword() {
-        return "";
+        return this.senha;
     }
 
     @Override

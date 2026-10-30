@@ -1,6 +1,6 @@
 package com.joao2dev.payment_system.dto;
 
-public record UserResponse(Long id, String name, String email, String password) {
+public record UserResponse(Long id, String name, String email) {
 
 
 }

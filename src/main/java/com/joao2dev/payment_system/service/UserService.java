@@ -25,27 +25,18 @@ public class UserService {
 
     public UserResponse registerUser(User user) throws MessagingException, UnsupportedEncodingException {
         if (userRepository.findByEmail(user.getEmail())!= null) {
-            throw new RuntimeException("This email already exists");
+            throw new RuntimeException("This email already exists");}
 
-        }else {
-            String encodedPassword = passwordEncoder.encode(user.getPassword());
-            user.setSenha(encodedPassword);
-
-            String randomCode = RandomString.generatedRandomString(64);
-            user.setVerificationCode(randomCode);
+            String password = user.getSenha();
+            user.setSenha(passwordEncoder.encode(user.getSenha()));
+            user.setVerificationCode(RandomString.generatedRandomString(64));
             user.setEnabled(false);
 
             User savedUser = userRepository.save(user);
+            mailService.sendVerificationEmail(savedUser);
 
-            UserResponse userResponse = new UserResponse(
-                    savedUser.getId(),
-                    savedUser.getName(),
-                    savedUser.getEmail(),
-                    savedUser.getSenha());
+            return new UserResponse(savedUser.getId(), savedUser.getName(), savedUser.getEmail());
 
-           mailService.sendVerificationEmail(user);
-            return userResponse;
-        }
     }
     public boolean verify(String verificationCode){
         User user = userRepository.findByVerificationCode(verificationCode);

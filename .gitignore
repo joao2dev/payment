@@ -32,3 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 .env
+/certs/producao-963426-payment-system.p12
